@@ -1252,6 +1252,10 @@ fload(FD, server, GC, C, Cs, Lno, Chars) ->
             C2 = C#sconf{shaper = list_to_atom(Module)},
             fload(FD, server, GC, C2, Cs, Lno+1, Next);
 
+        ["custom_auth_mod", '=', Module] ->
+            C2 = C#sconf{custom_auth = list_to_atom(Module)},
+            fload(FD, server, GC, C2, Cs, Lno+1, Next);
+
         [H|T] ->
             {error, ?F("Unexpected input ~p at line ~w", [[H|T], Lno])};
         Err ->

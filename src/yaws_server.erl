@@ -48,6 +48,9 @@
          'DELETE'/4,
          'PATCH'/4]).
 
+%% tests
+-export ([custom_auth/2]).
+
 -import(lists, [member/2, foreach/2, map/2,
                 flatten/1, reverse/1]).
 
@@ -1125,9 +1128,10 @@ aloop(CliSock, {IP,Port}, GS, Num) ->
     ?Debug("Head = ~p~n", [Head]),
     case Head of
         {Req0, H0} when Req0#http_request.method /= bad_request ->
-            {Req, H} = fix_abs_uri(Req0, H0),
-            ?Debug("{Req, H} = ~p~n", [{Req, H}]),
-            SC = pick_sconf(GS#gs.gconf, H, GS#gs.group),
+            {Req, H1} = fix_abs_uri(Req0, H0),
+            ?Debug("{Req, H} = ~p~n", [{Req, H1}]),
+            SC = pick_sconf(GS#gs.gconf, H1, GS#gs.group),
+            H = custom_auth(H1, SC),
             ?Debug("SC: ~s", [?format_record(SC, sconf)]),
             ?TC([{record, SC, sconf}]),
             ?Debug("Headers = ~s~n", [?format_record(H, headers)]),
@@ -1315,6 +1319,11 @@ fix_abs_uri(Req, H) ->
         _ -> {Req, H}
     end.
 
+custom_auth(H, SC) ->
+    case SC#sconf.custom_auth of
+        undefined -> H;
+        Mod -> Mod:custom_auth(H)
+    end.
 
 %% Case-insensitive compare servername and ignore any optional :Port
 %% postfix. This is performance-sensitive code, so if you change it,

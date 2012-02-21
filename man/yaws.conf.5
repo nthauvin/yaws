@@ -613,6 +613,21 @@ page for how to use the \fIopaque\fR + \fIvdir\fR elements to instruct the
 \fIyaws_vdir\fR module what paths to rewrite.
 
 .TP
+\fBcustom_auth_mod = Module\fR
+This module is called just after the parsing of the headers and allows
+to modify them, for example to be able to change the authorization
+structure according to a cookie value. This customisation is done
+even earlier than \farg_rewrite_mod\f, enabling the user
+name to be dumped in the access logs.
+
+The module \fIyaws_vdir\fR can be used in case you want to serve static content
+that is not located in your docroot. See the example at the bottom of this man
+page for how to use the \fIopaque\fR + \fIvdir\fR elements to instruct the
+\fIyaws_vdir\fR module what paths to rewrite.
+
+
+
+.TP
 \fBstart_mod = Module\fR
 Defines a user provided callback module.
 At startup of the server, Module:start/1 will be called.

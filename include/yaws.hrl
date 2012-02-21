@@ -235,7 +235,8 @@
 	 stats,                       %% raw traffic statistics
          fcgi_app_server,             %% FastCGI application server {host,port}
          php_handler = {cgi, "/usr/bin/php-cgi"},
-         shaper
+         shaper,
+         custom_auth
         }).
 
 %% we cannot compare sconfs directly due to the ets
